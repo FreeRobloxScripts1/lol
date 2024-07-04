@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bypass Key</title>
+    <script>
+        function updateButtonState() {
+            const inputField = document.getElementById('urlInput');
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = inputField.value.trim() === '';
+        }
+
+        async function fetchResult() {
+            const inputField = document.getElementById('urlInput');
+            const resultDiv = document.getElementById('result');
+            const url = `http://45.90.13.151:6041/?url=${encodeURIComponent(inputField.value)}`;
+
+            try {
+                resultDiv.innerHTML = 'Loading...';
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.status === "success" && data.key) {
+                    resultDiv.innerHTML = `Key: ${data.key}`;
+                } else {
+                    resultDiv.innerHTML = 'Invalid Key Link Or Not Supported Link';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'An Error Occurred';
+                console.error('Error Fetching The Key Bypass API:', error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Bypass Key</h1>
+    <input type="text" id="urlInput" oninput="updateButtonState()" placeholder="Enter Link Here">
+    <button id="submitButton" onclick="fetchResult()" disabled>Bypass Key</button>
+    <div id="result"></div>
+</body>
+  </html>
